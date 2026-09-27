@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitectura — Curador de Moda IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2B241E;
+    --ink-soft:#5B5347;
+    --paper:#ECE6DA;
+    --paper-deep:#E1D9C8;
+    --card:#F6F2E9;
+    --line:#C9BFA9;
+
+    --l1:#A8677A; --l1-soft:#EADCE0;
+    --l2:#3E6259; --l2-soft:#DCE5E1;
+    --l3:#AD8639; --l3-soft:#EDE3CC;
+    --l4:#5C4A6E; --l4-soft:#E2DCE7;
+    --l5:#3A4A5C; --l5-soft:#DCE1E5;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 500px at 15% -5%, #F3EEE3 0%, transparent 60%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    padding:56px 20px 90px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .stage{max-width:840px;margin:0 auto;}
+
+  /* ---------- HERO ---------- */
+  .hero{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:38px;}
+  .tagchip{
+    position:relative;
+    background:var(--card);
+    border:1.5px solid var(--ink);
+    padding:10px 26px 10px 34px;
+    font-family:'Work Sans',sans-serif;
+    font-size:12.5px;
+    letter-spacing:.02em;
+    color:var(--ink-soft);
+    border-radius:3px 14px 14px 3px;
+    transform:rotate(-2deg);
+    margin-bottom:22px;
+  }
+  .tagchip::before{
+    content:"";
+    position:absolute;left:12px;top:50%;transform:translateY(-50%);
+    width:7px;height:7px;border-radius:50%;
+    background:var(--paper);
+    border:1.5px solid var(--ink);
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(34px,5.2vw,52px);
+    line-height:1.05;
+    margin:0 0 12px;
+  }
+  .hero p{
+    max-width:480px;
+    color:var(--ink-soft);
+    font-size:15px;
+    line-height:1.6;
+    margin:0;
+  }
+
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:46px;
+  }
+  .btn{
+    font-family:'Work Sans',sans-serif;
+    font-size:13px;
+    font-weight:500;
+    color:var(--card);
+    background:var(--ink);
+    border:none;
+    padding:11px 20px;
+    border-radius:22px;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn.secondary{
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--ink);
+  }
+  .btn:focus-visible{outline:3px solid var(--l3); outline-offset:2px;}
+
+  /* ---------- RACK / THREAD ---------- */
+  .rack{position:relative;padding-left:26px;}
+  .thread{
+    position:absolute;
+    left:6px; top:6px; bottom:6px;
+    width:2px;
+    background:repeating-linear-gradient(
+      to bottom, var(--line) 0 6px, transparent 6px 12px
+    );
+  }
+  .pulse{
+    position:absolute;
+    left:50%;
+    top:0;
+    width:11px;height:11px;
+    margin-left:-5.5px;
+    border-radius:50%;
+    background:var(--l3);
+    box-shadow:0 0 0 4px rgba(173,134,57,.18);
+    opacity:0;
+  }
+  .pulse.run{
+    animation:travel 3.2s ease-in-out 1;
+    opacity:1;
+  }
+  @keyframes travel{
+    0%{top:0%; opacity:1;}
+    8%{opacity:1;}
+    46%{top:100%;}
+    50%{top:100%;}
+    92%{opacity:1;}
+    100%{top:0%; opacity:0;}
+  }
+
+  /* ---------- LAYER ---------- */
+  .layer{
+    position:relative;
+    margin-bottom:34px;
+  }
+  .layer::before{
+    content:"";
+    position:absolute;
+    left:-26px; top:19px;
+    width:20px; height:2px;
+    background:var(--line);
+  }
+
+  .layer-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    text-align:left;
+    background:var(--card);
+    border:1.5px solid var(--ink);
+    border-left:8px solid var(--accent);
+    padding:16px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .layer-head:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+
+  .layer-index{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;
+    font-size:26px;
+    color:var(--accent);
+    min-width:34px;
+  }
+  .layer-title{flex:1;}
+  .layer-title h2{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;
+    font-size:22px;
+    margin:0 0 3px;
+  }
+  .layer-title p{
+    margin:0;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .chevron{
+    font-size:20px;
+    color:var(--ink-soft);
+    transition:transform .3s ease;
+    flex-shrink:0;
+  }
+  .layer.open .chevron{transform:rotate(180deg);}
+
+  .layer-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .45s ease, opacity .35s ease, padding .35s ease;
+    opacity:0;
+    padding:0 6px;
+  }
+  .layer.open .layer-body{
+    max-height:900px;
+    opacity:1;
+    padding:22px 6px 4px;
+  }
+
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:22px 18px;
+    justify-content:flex-start;
+  }
+
+  .tag{
+    position:relative;
+    background:var(--bgsoft);
+    border:1.5px solid var(--ink);
+    border-radius:3px 12px 12px 3px;
+    padding:16px 16px 14px 20px;
+    width:200px;
+    font-size:13px;
+    line-height:1.45;
+    color:var(--ink);
+  }
+  .tag::before{
+    content:"";
+    position:absolute; top:-14px; left:14px;
+    width:2px; height:14px;
+    background:var(--line);
+  }
+  .tag::after{
+    content:"";
+    position:absolute; left:8px; top:9px;
+    width:6px; height:6px; border-radius:50%;
+    background:var(--paper);
+    border:1.5px solid var(--ink);
+  }
+  .tag h3{
+    font-family:'Cormorant Garamond',serif;
+    font-size:16.5px;
+    font-weight:600;
+    margin:0 0 6px;
+  }
+  .tag p{margin:0; color:var(--ink-soft);}
+
+  .layer.open .tag{
+    animation:float 4.5s ease-in-out infinite;
+  }
+  .tags .tag:nth-child(2){animation-delay:.4s !important;}
+  .tags .tag:nth-child(3){animation-delay:.8s !important;}
+  .tags .tag:nth-child(4){animation-delay:1.2s !important;}
+  .tags .tag:nth-child(5){animation-delay:1.6s !important;}
+
+  @keyframes float{
+    0%,100%{transform:translateY(0) rotate(0deg);}
+    50%{transform:translateY(-6px) rotate(-.6deg);}
+  }
+
+  .techline{
+    margin-top:20px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .techline b{color:var(--ink); font-weight:600;}
+
+  /* ---------- FOOT NOTE ---------- */
+  .footnote{
+    text-align:center;
+    margin-top:50px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:560px){
+    .rack{padding-left:18px;}
+    .layer::before{left:-18px; width:12px;}
+    .tag{width:100%;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .layer.open .tag{animation:none;}
+    .pulse.run{animation:none; opacity:0;}
+    .btn:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <div class="hero">
+    <div class="tagchip">Ficha técnica · Arquitectura de software</div>
+    <h1>Curador de Moda IA</h1>
+    <p>Arquitectura por capas del sistema que arma outfits reales a partir del clóset del usuario, el clima del día y la ocasión. Toca cada capa para desplegarla.</p>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="simulateBtn">Simular flujo de una petición</button>
+    <button class="btn secondary" id="expandAllBtn">Expandir todas las capas</button>
+  </div>
+
+  <div class="rack" id="rack">
+    <div class="thread"></div>
+    <div class="pulse" id="pulse"></div>
+
+    <!-- CAPA 1 -->
+    <section class="layer" style="--accent:var(--l1);">
+      <button class="layer-head" aria-expanded="false">
+        <span class="layer-index">01</span>
+        <span class="layer-title">
+          <h2>Capa de presentación</h2>
+          <p>Frontend — lo que ve y toca el usuario</p>
+        </span>
+        <span class="chevron">⌄</span>
+      </button>
+      <div class="layer-body">
+        <div class="tags">
+          <div class="tag" style="--bgsoft:var(--l1-soft)"><h3>Subida de clóset</h3><p>Fotos de prendas por drag & drop o cámara.</p></div>
+          <div class="tag" style="--bgsoft:var(--l1-soft)"><h3>Generador de outfits</h3><p>Botón "vestirme hoy" con ocasión y clima.</p></div>
+          <div class="tag" style="--bgsoft:var(--l1-soft)"><h3>Widget de clima</h3><p>Muestra temperatura y condición del día.</p></div>
+          <div class="tag" style="--bgsoft:var(--l1-soft)"><h3>Historial de looks</h3><p>Outfits generados en días anteriores.</p></div>
+        </div>
+        <div class="techline"><b>Stack:</b> React · Tailwind CSS · Axios · diseño responsivo</div>
+      </div>
+    </section>
+
+    <!-- CAPA 2 -->
+    <section class="layer" style="--accent:var(--l2);">
+      <button class="layer-head" aria-expanded="false">
+        <span class="layer-index">02</span>
+        <span class="layer-title">
+          <h2>Capa de aplicación / API</h2>
+          <p>Backend — reglas de negocio y orquestación</p>
+        </span>
+        <span class="chevron">⌄</span>
+      </button>
+      <div class="layer-body">
+        <div class="tags">
+          <div class="tag" style="--bgsoft:var(--l2-soft)"><h3>/auth</h3><p>Registro, login y sesión con JWT.</p></div>
+          <div class="tag" style="--bgsoft:var(--l2-soft)"><h3>/garments</h3><p>CRUD de prendas del clóset del usuario.</p></div>
+          <div class="tag" style="--bgsoft:var(--l2-soft)"><h3>/outfits/generate</h3><p>Orquesta clima + ocasión + IA.</p></div>
+          <div class="tag" style="--bgsoft:var(--l2-soft)"><h3>/weather</h3><p>Proxy hacia el proveedor de clima.</p></div>
+        </div>
+        <div class="techline"><b>Stack:</b> FastAPI · Pydantic · autenticación JWT · validación y control de acceso</div>
+      </div>
+    </section>
+
+    <!-- CAPA 3 -->
+    <section class="layer" style="--accent:var(--l3);">
+      <button class="layer-head" aria-expanded="false">
+        <span class="layer-index">03</span>
+        <span class="layer-title">
+          <h2>Capa de inteligencia artificial</h2>
+          <p>El corazón del sistema</p>
+        </span>
+        <span class="chevron">⌄</span>
+      </button>
+      <div class="layer-body">
+        <div class="tags">
+          <div class="tag" style="--bgsoft:var(--l3-soft)"><h3>Reconocimiento visual</h3><p>Identifica prendas reales desde las fotos.</p></div>
+          <div class="tag" style="--bgsoft:var(--l3-soft)"><h3>Razonamiento de combinaciones</h3><p>El LLM arma el outfit y explica el porqué.</p></div>
+          <div class="tag" style="--bgsoft:var(--l3-soft)"><h3>Contexto de clima y ocasión</h3><p>Ajusta el resultado a lo puntual del día.</p></div>
+        </div>
+        <div class="techline"><b>Stack:</b> Modelo de visión multimodal (Claude/GPT con visión) · prompt de razonamiento · API de clima externa</div>
+      </div>
+    </section>
+
+    <!-- CAPA 4 -->
+    <section class="layer" style="--accent:var(--l4);">
+      <button class="layer-head" aria-expanded="false">
+        <span class="layer-index">04</span>
+        <span class="layer-title">
+          <h2>Capa de datos</h2>
+          <p>Todo lo que se guarda</p>
+        </span>
+        <span class="chevron">⌄</span>
+      </button>
+      <div class="layer-body">
+        <div class="tags">
+          <div class="tag" style="--bgsoft:var(--l4-soft)"><h3>Usuarios</h3><p>Perfil, preferencias de estilo.</p></div>
+          <div class="tag" style="--bgsoft:var(--l4-soft)"><h3>Prendas</h3><p>Categoría, color, temporada, foto.</p></div>
+          <div class="tag" style="--bgsoft:var(--l4-soft)"><h3>Outfits generados</h3><p>Combinación, fecha, ocasión, clima usado.</p></div>
+          <div class="tag" style="--bgsoft:var(--l4-soft)"><h3>Imágenes</h3><p>Archivos de fotos de las prendas.</p></div>
+        </div>
+        <div class="techline"><b>Stack:</b> PostgreSQL (datos relacionales) · almacenamiento de objetos para imágenes</div>
+      </div>
+    </section>
+
+    <!-- CAPA 5 -->
+    <section class="layer" style="--accent:var(--l5);">
+      <button class="layer-head" aria-expanded="false">
+        <span class="layer-index">05</span>
+        <span class="layer-title">
+          <h2>Capa de infraestructura</h2>
+          <p>Nube — donde vive todo</p>
+        </span>
+        <span class="chevron">⌄</span>
+      </button>
+      <div class="layer-body">
+        <div class="tags">
+          <div class="tag" style="--bgsoft:var(--l5-soft)"><h3>Cómputo</h3><p>Contenedores para frontend y backend.</p></div>
+          <div class="tag" style="--bgsoft:var(--l5-soft)"><h3>Base de datos gestionada</h3><p>PostgreSQL en servicio administrado.</p></div>
+          <div class="tag" style="--bgsoft:var(--l5-soft)"><h3>Almacenamiento + CDN</h3><p>Fotos servidas rápido en cualquier lugar.</p></div>
+          <div class="tag" style="--bgsoft:var(--l5-soft)"><h3>Despliegue continuo</h3><p>Publica cambios de forma automática.</p></div>
+        </div>
+        <div class="techline"><b>Stack:</b> AWS (ECS/EC2, RDS, S3, CloudFront) · Docker · CI/CD</div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="footnote">Toca el encabezado de cada capa para desplegarla o ciérrala de nuevo · "Simular flujo" muestra cómo baja la petición y sube la respuesta</div>
+
+</div>
+
+<script>
+  const layers = document.querySelectorAll('.layer');
+  layers.forEach(layer => {
+    const head = layer.querySelector('.layer-head');
+    head.addEventListener('click', () => {
+      const isOpen = layer.classList.toggle('open');
+      head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+
+  document.getElementById('expandAllBtn').addEventListener('click', (e) => {
+    const anyClosed = [...layers].some(l => !l.classList.contains('open'));
+    layers.forEach(layer => {
+      layer.classList.toggle('open', anyClosed);
+      layer.querySelector('.layer-head').setAttribute('aria-expanded', anyClosed ? 'true' : 'false');
+    });
+    e.target.textContent = anyClosed ? 'Contraer todas las capas' : 'Expandir todas las capas';
+  });
+
+  document.getElementById('simulateBtn').addEventListener('click', () => {
+    const pulse = document.getElementById('pulse');
+    pulse.classList.remove('run');
+    void pulse.offsetWidth; // reinicia la animación
+    pulse.classList.add('run');
+  });
+</script>
+
+</body>
+</html>
